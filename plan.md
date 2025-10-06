@@ -47,25 +47,25 @@ graph TD
   B --> P
 
   subgraph Eventing
-    I[(Event Bus: NATS/Kafka)]
+    I["Event Bus:<br/>NATS/Kafka"]
   end
 
-  D -->|events| I
-  E -->|events| I
-  F -->|events| I
-  L -->|events| I
-  M -->|events| I
+  D -- events --> I
+  E -- events --> I
+  F -- events --> I
+  L -- events --> I
+  M -- events --> I
 
-  D --> G[(PostgreSQL OLTP)]
+  D --> G["PostgreSQL OLTP"]
   E --> G
   F --> G
   P -.-> G
-  D --> H[(Redis Cache)]
-  E --> J[(S3/MinIO Objects)]
-  F --> K[(Warehouse: ClickHouse/BigQuery)]
+  D --> H["Redis Cache"]
+  E --> J["S3/MinIO Objects"]
+  F --> K["Warehouse:<br/>ClickHouse/BigQuery"]
 ```
 
-Note: For MVP, the BFF and core services can live in a single repository as a modular monolith, using internal module boundaries and an internal event bus. Extract to independent services when scale/teams require.
+Note: For MVP, the BFF and core services can live in a single repository as a modular monolith, using internal module boundaries and an internal event bus. Extract to independent services when scale/t[...]
 
 ## Services (boundaries and responsibilities)
 - **Web App / BFF**
@@ -195,5 +195,3 @@ Note: For MVP, the BFF and core services can live in a single repository as a mo
 8. Offline/mobile-first requirements?
 9. Role matrix: learner, author, reviewer, admin—any others (parent/teacher)?
 10. Budget for managed services vs OSS components?
-
-
