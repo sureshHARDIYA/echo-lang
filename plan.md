@@ -20,50 +20,30 @@
 
 ## High-Level Architecture
 
-```mermaid
-graph TD
+Architecture summary (textual):
 
-  A[Web/App (Next.js)] -->|Requests| B[BFF/API Gateway]
-  B -->|OIDC| C[Auth Provider (Keycloak)]
+- Interaction flow:
+  - Web/App (Next.js) → BFF/API Gateway
+  - BFF/API uses Auth Provider (Keycloak) for OIDC
 
-  subgraph Core_Services
-    D[User/Profile Service]
-    E[Content Service]
-    F[Progress/Telemetry Service]
-    L[Recommendation/Adaptation]
-    M[Assessment/Scoring]
-    N[Search]
-    O[Notifications]
-    P[Policy/AuthZ (OPA)]
-  end
+- Core services:
+  - User/Profile Service
+  - Content Service
+  - Progress/Telemetry Service
+  - Recommendation/Adaptation Service
+  - Assessment/Scoring Service
+  - Search Service
+  - Notifications Service
+  - Policy/Authorization Service (OPA)
 
-  B --> D
-  B --> E
-  B --> F
-  B --> L
-  B --> M
-  B --> N
-  B --> O
-  B --> P
+- Eventing:
+  - Event Bus (NATS or Kafka) for async communication among services
 
-  subgraph Eventing
-    I["Event Bus:<br/>NATS/Kafka"]
-  end
-
-  D -- events --> I
-  E -- events --> I
-  F -- events --> I
-  L -- events --> I
-  M -- events --> I
-
-  D --> G["PostgreSQL OLTP"]
-  E --> G
-  F --> G
-  P -.-> G
-  D --> H["Redis Cache"]
-  E --> J["S3/MinIO Objects"]
-  F --> K["Warehouse:<br/>ClickHouse/BigQuery"]
-```
+- Data stores:
+  - PostgreSQL (OLTP)
+  - Redis (cache)
+  - S3/MinIO (object storage)
+  - Analytics Warehouse (ClickHouse/BigQuery)
 
 Note: For MVP, the BFF and core services can live in a single repository as a modular monolith, using internal module boundaries and an internal event bus. Extract to independent services when scale/t[...]
 
