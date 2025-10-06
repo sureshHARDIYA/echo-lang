@@ -21,28 +21,41 @@
 ## High-Level Architecture
 
 ```mermaid
-flowchart TB
+graph TD
+
   A[Web/App (Next.js)] -->|Requests| B[BFF/API Gateway]
   B -->|OIDC| C[Auth Provider (Keycloak)]
 
-  %% Core domain services
-  B --> D[User/Profile Service]
-  B --> E[Content Service]
-  B --> F[Progress/Telemetry Service]
-  B --> L[Recommendation/Adaptation Service]
-  B --> M[Assessment/Scoring Service]
-  B --> N[Search Service]
-  B --> O[Notifications Service]
-  B --> P[Policy/Authorization Service (OPA)]
+  subgraph Core_Services
+    D[User/Profile Service]
+    E[Content Service]
+    F[Progress/Telemetry Service]
+    L[Recommendation/Adaptation]
+    M[Assessment/Scoring]
+    N[Search]
+    O[Notifications]
+    P[Policy/AuthZ (OPA)]
+  end
 
-  %% Eventing (async)
-  D -->|events| I[(Event Bus: NATS/Kafka)]
+  B --> D
+  B --> E
+  B --> F
+  B --> L
+  B --> M
+  B --> N
+  B --> O
+  B --> P
+
+  subgraph Eventing
+    I[(Event Bus: NATS/Kafka)]
+  end
+
+  D -->|events| I
   E -->|events| I
   F -->|events| I
   L -->|events| I
   M -->|events| I
 
-  %% Data stores
   D --> G[(PostgreSQL OLTP)]
   E --> G
   F --> G
